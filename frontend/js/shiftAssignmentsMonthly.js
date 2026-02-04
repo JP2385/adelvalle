@@ -117,6 +117,13 @@ export function assignSaturdayP1(users, accumulatedCounts) {
 
     saturdays.forEach(saturdaySelect => {
         const currentDay = saturdaySelect.getAttribute('data-day');
+        
+        // Verificar si el día es feriado, si es así, saltar la asignación
+        const cell = saturdaySelect.closest('td');
+        if (cell && cell.classList.contains('holiday')) {
+            console.log(`Saltando asignación P1 en ${currentDay} porque es feriado`);
+            return;
+        }
 
         // Verificar si ya existe una asignación de "P1" en el sábado actual
         const isP1Assigned = Array.from(document.querySelectorAll(`.shift-select[data-day="${currentDay}"]`))
@@ -190,6 +197,13 @@ export function assignSaturdayP2(users, accumulatedCounts) {
 
     saturdays.forEach(saturdaySelect => {
         const currentDay = saturdaySelect.getAttribute('data-day');
+        
+        // Verificar si el día es feriado, si es así, saltar la asignación
+        const cell = saturdaySelect.closest('td');
+        if (cell && cell.classList.contains('holiday')) {
+            console.log(`Saltando asignación P2 en ${currentDay} porque es feriado`);
+            return;
+        }
 
         // Verificar si ya existe una asignación de "P2" en el sábado actual
         const isP2Assigned = Array.from(document.querySelectorAll(`.shift-select[data-day="${currentDay}"]`))
