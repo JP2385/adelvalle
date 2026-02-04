@@ -1,5 +1,15 @@
 import { isAlreadyAssigned, countWeekdayShifts, countWeekendShifts, countSaturdayShifts, countSaturdayP2Shifts } from './shiftAssignmentsUtils.js';
 
+// Función para hacer shuffle de un array usando Fisher-Yates
+function shuffleArray(array) {
+    const shuffled = [...array]; // Crear copia para no mutar el original
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 export function assignIm(rows, selects, isLharriagueAssignedToday, isMquirogaAssignedToday, assignedFnUser, assignedImUser, isWeekend, accumulatedCounts) {
     console.log(`\nIniciando asignación de Im para el día: ${selects[0].getAttribute('data-day')}, es fin de semana: ${isWeekend}`);
 
@@ -306,6 +316,9 @@ export function assignWeekendIfLtotisAssigned(users) {
 
 
 function assignShift(selects, assignmentType, isLharriagueAssignedToday, isMquirogaAssignedToday, userShiftCounts, isCardioCheck, isWeekend) {
+    // Hacer shuffle del array de selects para aleatorizar el orden de asignación
+    const shuffledSelects = shuffleArray(selects);
+    
     let minShifts = Math.min(...Object.values(userShiftCounts).filter(count => count > 0));
     let maxShifts = calculateMaxShifts(userShiftCounts); // Inicialización de maxShifts como el valor más común en userShiftCounts
     let noAssignment = true; // Para rastrear si se hizo una asignación
@@ -314,7 +327,7 @@ function assignShift(selects, assignmentType, isLharriagueAssignedToday, isMquir
 
     while (noAssignment) {
 
-        for (const select of selects) {
+        for (const select of shuffledSelects) {
             const username = select.getAttribute('data-username');
             
             // 🔴 EXCLUIR ecesar de toda asignación automática
