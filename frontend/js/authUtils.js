@@ -156,8 +156,8 @@ function disableIfNoPermission(selector, resource, action) {
  */
 function redirectIfNoPermission(resource, action, redirectUrl = '/index.html') {
     if (!hasPermission(resource, action)) {
-        alert('No tienes permisos para acceder a esta página.');
-        window.location.href = redirectUrl;
+        showWarning('No tienes permisos para acceder a esta página');
+        setTimeout(() => window.location.href = redirectUrl, 1500);
     }
 }
 
@@ -168,8 +168,8 @@ function redirectIfNoPermission(resource, action, redirectUrl = '/index.html') {
  */
 function redirectIfNoRole(redirectUrl = '/index.html', ...allowedRoles) {
     if (!hasRole(...allowedRoles)) {
-        alert('No tienes permisos para acceder a esta página.');
-        window.location.href = redirectUrl;
+        showWarning('No tienes permisos para acceder a esta página');
+        setTimeout(() => window.location.href = redirectUrl, 1500);
     }
 }
 

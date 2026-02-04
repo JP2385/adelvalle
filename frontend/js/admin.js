@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
         .catch(error => {
-            alert('Hubo un problema al obtener la lista de usuarios: ' + error.message);
+            showError('Hubo un problema al obtener la lista de usuarios: ' + error.message);
         });
 
     // Manejar la selección de usuario
@@ -119,14 +119,14 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (response.ok) {
-                alert('Usuario actualizado exitosamente.');
-                window.location.reload();
+                showSuccess('Usuario actualizado exitosamente');
+                setTimeout(() => window.location.reload(), 1000);
             } else {
                 const errorData = await response.json();
-                alert(`Error: ${errorData.message}`);
+                showError(errorData.message);
             }
         } catch (error) {
-            alert('Hubo un problema con la solicitud: ' + error.message);
+            showError('Hubo un problema con la solicitud: ' + error.message);
         }
     });
 
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         validateEndDate(startDateInput, endDateInput, submitButton, handleDateChange);
 
         if (!startDate || !endDate) {
-            alert('Por favor, ingresa ambas fechas de inicio y fin.');
+            showWarning('Por favor, ingresa ambas fechas de inicio y fin');
             return;
         }
 
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const leaveType = selectedType === 'Otro' ? customType : selectedType;
 
         if (!startDate || !endDate || !leaveType) {
-            alert('Por favor, complete las fechas y seleccione un concepto.');
+            showWarning('Por favor, complete las fechas y seleccione un concepto');
             return;
         }
 
@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert(`Error: ${errorData.message}`);
             }
         } catch (error) {
-            alert('Hubo un problema con la solicitud: ' + error.message);
+            showError('Hubo un problema con la solicitud: ' + error.message);
         }
     }
 
@@ -305,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const newRole = document.getElementById('userRole').value;
 
         if (!userId) {
-            alert('Por favor selecciona un usuario');
+            showWarning('Por favor selecciona un usuario');
             return;
         }
 
@@ -322,13 +322,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (response.ok) {
                     const result = await response.json();
-                    alert(result.message || 'Rol actualizado correctamente');
+                    showSuccess(result.message || 'Rol actualizado correctamente');
                 } else {
                     const errorData = await response.json();
-                    alert(`Error: ${errorData.message}`);
+                    showError(errorData.message);
                 }
             } catch (error) {
-                alert('Hubo un problema al actualizar el rol: ' + error.message);
+                showError('Hubo un problema con la solicitud: ' + error.message);
             }
         }
     });

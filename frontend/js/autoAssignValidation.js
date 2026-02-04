@@ -52,7 +52,7 @@ export async function validateAssignmentForDay(dayIndex) {
 
     if (siteCounts[day] > availabilityCount[day]) {
         const dayNameInSpanish = daysMapping[day];
-        alert(`El ${dayNameInSpanish} tiene más sitios de trabajo que anestesiólogos disponibles. Por favor, corrija y vuelva a intentar.`);
+        showError(`El ${dayNameInSpanish} tiene más sitios de trabajo que anestesiólogos disponibles. Por favor, corrija y vuelva a intentar.`);
         return false;
     }
 
@@ -88,9 +88,9 @@ export async function validateAllDays() {
 
     if (daysWithIssues.length > 0) {
         if (daysWithIssues.length === 1) {
-            alert(`El día ${daysWithIssues[0]} tiene más lugares de trabajo que anestesiólogos disponibles. Por favor, corrija y vuelva a intentar.`);
+            showError(`El día ${daysWithIssues[0]} tiene más lugares de trabajo que anestesiólogos disponibles. Por favor, corrija y vuelva a intentar.`);
         } else {
-            alert(`Los días ${daysWithIssues.join(', ')} tienen más lugares de trabajo que anestesiólogos disponibles. Por favor, corrija y vuelva a intentar.`);
+            showError(`Los días ${daysWithIssues.join(', ')} tienen más lugares de trabajo que anestesiólogos disponibles. Por favor, corrija y vuelva a intentar.`);
         }
         return false;
     }
