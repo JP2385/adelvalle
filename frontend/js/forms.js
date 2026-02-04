@@ -39,23 +39,23 @@ if (loginForm) {
                         // console.log('Token saved in sessionStorage:', data.token);
                     }
 
-                    alert('Inicio de sesión exitoso');
-                    window.location.href = 'index.html';
+                    showSuccess('Inicio de sesión exitoso');
+                    setTimeout(() => window.location.href = 'index.html', 800);
                 } else {
-                    alert('Error: El servidor no respondió correctamente');
+                    showError('El servidor no respondió correctamente');
                 }
             } else {
                 if (contentType && contentType.includes('application/json')) {
                     const errorData = await response.json();
                     console.log('Error response:', errorData);
-                    alert(`Error: ${errorData.message}`);
+                    showError(errorData.message);
                 } else {
-                    alert(`Error: El servidor respondió con estado ${response.status}`);
+                    showError(`El servidor respondió con estado ${response.status}`);
                 }
             }
         } catch (error) {
             console.log('Fetch error:', error.message);
-            alert('Hubo un problema con la solicitud: ' + error.message);
+            showError('Hubo un problema con la solicitud: ' + error.message);
         }
     });
 }
@@ -73,7 +73,7 @@ if (loginForm) {
             const confirmPassword = document.getElementById('confirm-password').value;
 
             if (password !== confirmPassword) {
-                alert('Las contraseñas no coinciden.');
+                showError('Las contraseñas no coinciden');
                 return;
             }
 
@@ -90,14 +90,14 @@ if (loginForm) {
                 });
 
                 if (response.ok) {
-                    alert('Registro exitoso, ahora puedes loguearte!');
-                    window.location.href = 'login.html';
+                    showSuccess('Registro exitoso, ahora puedes iniciar sesión');
+                    setTimeout(() => window.location.href = 'login.html', 1500);
                 } else {
                     const errorData = await response.json();
-                    alert(`Error: ${errorData.message}`);
+                    showError(errorData.message);
                 }
             } catch (error) {
-                alert('Hubo un problema con la solicitud: ' + error.message);
+                showError('Hubo un problema con la solicitud: ' + error.message);
             } finally {
                 submitButton.disabled = false;
             }
@@ -121,7 +121,7 @@ if (loginForm) {
             const confirmPassword = document.getElementById('confirm-password').value;
 
             if (newPassword !== confirmPassword) {
-                alert('Las nuevas contraseñas no coinciden.');
+                showWarning('Las nuevas contraseñas no coinciden');
                 return;
             }
 
@@ -136,14 +136,14 @@ if (loginForm) {
                 });
 
                 if (response.ok) {
-                    alert('Contraseña cambiada exitosamente.');
+                    showSuccess('Contraseña cambiada exitosamente');
                     toggleChangePassword();
                 } else {
                     const errorData = await response.json();
-                    alert(`Error: ${errorData.message}`);
+                    showError(errorData.message);
                 }
             } catch (error) {
-                alert('Hubo un problema con la solicitud: ' + error.message);
+                showError('Hubo un problema con la solicitud: ' + error.message);
             }
         };
     }
@@ -165,13 +165,13 @@ if (loginForm) {
                 });
 
                 if (response.ok) {
-                    alert('Correo de recuperación enviado. Revisa tu bandeja de entrada.');
+                    showSuccess('Correo de recuperación enviado. Revisa tu bandeja de entrada');
                 } else {
                     const errorData = await response.json();
-                    alert(`Error: ${errorData.message}`);
+                    showError(errorData.message);
                 }
             } catch (error) {
-                alert('Hubo un problema con la solicitud: ' + error.message);
+                showError('Hubo un problema con la solicitud: ' + error.message);
             }
         });
     }
@@ -187,7 +187,7 @@ if (loginForm) {
             const confirmPassword = document.getElementById('confirm-password').value;
 
             if (newPassword !== confirmPassword) {
-                alert('Las nuevas contraseñas no coinciden.');
+                showWarning('Las nuevas contraseñas no coinciden');
                 return;
             }
 
@@ -201,14 +201,14 @@ if (loginForm) {
                 });
 
                 if (response.ok) {
-                    alert('Contraseña restablecida exitosamente.');
-                    window.location.href = 'login.html';
+                    showSuccess('Contraseña restablecida exitosamente');
+                    setTimeout(() => window.location.href = 'login.html', 1000);
                 } else {
                     const errorData = await response.json();
-                    alert(`Error: ${errorData.message}`);
+                    showError(errorData.message);
                 }
             } catch (error) {
-                alert('Hubo un problema con la solicitud: ' + error.message);
+                showError('Hubo un problema con la solicitud: ' + error.message);
             }
         });
     }
@@ -218,8 +218,8 @@ if (loginForm) {
     if (profileInfo) {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
         if (!token) {
-            alert('No se encontró el token de autenticación. Por favor, inicie sesión.');
-            window.location.href = 'login.html';
+            showWarning('No se encontró el token de autenticación. Por favor, inicie sesión');
+            setTimeout(() => window.location.href = 'login.html', 1500);
             return;
         }
 
@@ -233,8 +233,8 @@ if (loginForm) {
         .then(response => response.json())
         .then(data => {
             if (data.message) {
-                alert(`Error: ${data.message}`);
-                window.location.href = 'login.html';
+                showError(data.message);
+                setTimeout(() => window.location.href = 'login.html', 1500);
             } else {
                 document.getElementById('profile-name').textContent = data.username;
                 document.getElementById('profile-email').textContent = data.email;
@@ -276,8 +276,8 @@ if (loginForm) {
             }
         })
         .catch(error => {
-            alert('Hubo un problema con la solicitud: ' + error.message);
-            window.location.href = 'login.html';
+            showError('Hubo un problema con la solicitud: ' + error.message);
+            setTimeout(() => window.location.href = 'login.html', 1500);
         });
     }
 
