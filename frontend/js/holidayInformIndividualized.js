@@ -22,10 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch(`${apiUrl}/holidays`)
                 .then(response => response.json())
                 .then(holidays => {
-                    // Filtrar los feriados donde el usuario está asignado
-                    const userHolidays = holidays.filter(holiday => 
-                        holiday.users.some(user => user.username === currentUser)
-                    );
+                    const currentYear = new Date().getFullYear();
+                    
+                    // Filtrar los feriados donde el usuario está asignado y que sean del año actual
+                    const userHolidays = holidays.filter(holiday => {
+                        const holidayYear = new Date(holiday.startDate).getFullYear();
+                        return holidayYear === currentYear && 
+                               holiday.users.some(user => user.username === currentUser);
+                    });
 
                     if (userHolidays.length === 0) {
                         holidayAssignmentsContainer.textContent = 'No tienes feriados asignados.';
