@@ -133,14 +133,14 @@ function generateTable(users, yearSelect, monthSelect, dayAbbreviations, guardSi
         usersBody.appendChild(row);
     });
 
-    // Aplicar asignaciones por defecto si no hay un horario existente
-    if (!existingSchedule) applyDefaultAssignments(usersBody);
-
-    // Realizar el recuento de guardias asignadas después de aplicar las asignaciones por defecto
-    const shiftCounts = countWeekdayShifts();
-
-    // Llamar a la función para resaltar feriados
-    highlightHolidays(apiUrl, year, month);
+    // Llamar a la función para resaltar feriados y aplicar asignaciones de feriados primero
+    highlightHolidays(apiUrl, year, month).then(() => {
+        // Aplicar asignaciones por defecto si no hay un horario existente
+        if (!existingSchedule) applyDefaultAssignments(usersBody);
+        
+        // Realizar el recuento de guardias asignadas después de aplicar las asignaciones por defecto
+        const shiftCounts = countWeekdayShifts();
+    });
 }
 
 
@@ -555,7 +555,7 @@ function highlightHolidays(apiUrl, year, month) {
     // Limpiar cualquier clase 'holiday' anterior en las celdas del mes
     document.querySelectorAll('.holiday').forEach(cell => cell.classList.remove('holiday'));
 
-    fetch(`${apiUrl}/holidays`, {
+    return fetch(`${apiUrl}/holidays`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -589,6 +589,24 @@ function highlightHolidays(apiUrl, year, month) {
                             }
                         });
                     } else {
+                    }
+                    
+                    // Aplicar asignaciones de usuarios asignados al feriado
+                    if (holiday.users && holiday.users.length > 0) {
+                        holiday.users.forEach(user => {
+                            const username = user.username;
+                            const select = document.querySelector(`select[data-day="${dayString}"][data-username="${username}"]`);
+                            
+                            if (select && !select.disabled && select.value === '') {
+                                const worksInPrivateRioNegro = select.getAttribute('data-privaterioneegro') === 'true';
+                                const assignment = worksInPrivateRioNegro ? 'Fn' : 'Im';
+                                
+                                // Verificar que la opción existe
+                                if (Array.from(select.options).some(option => option.value === assignment)) {
+                                    select.value = assignment;
+                                }
+                            }
+                        });
                     }
                 }
 
