@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.removeItem('token');
         sessionStorage.removeItem('token');
         
-        // Mensaje opcional para confirmar el logout
-        alert('Cierre de sesión exitoso.');
+        // Mostrar notificación de cierre de sesión
+        showSuccess('Cierre de sesión exitoso');
         
         // Redirigir al usuario a la página de login
-        window.location.href = 'login.html';
+        setTimeout(() => window.location.href = 'login.html', 800);
     });
 
     // Cerrar menú al hacer clic fuera de él
